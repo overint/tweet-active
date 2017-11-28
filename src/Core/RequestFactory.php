@@ -6,14 +6,13 @@ namespace App\Core;
 use GuzzleHttp\Psr7\Request;
 
 /**
- * RequestFactory
- * @package App\Core
+ * Request Factory
  */
 class RequestFactory
 {
 
     /**
-     * Create a request entity from PHP internal data
+     * Create a request entity from PHP internal server variables
      *
      * @return Request
      */

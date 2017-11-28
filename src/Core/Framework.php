@@ -12,8 +12,7 @@ use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Mini MVC Framework
- * @package App\Core
+ * Micro Framework
  */
 class Framework
 {
@@ -29,7 +28,7 @@ class Framework
 
 
     /**
-     * Constructor.
+     * Constructor
      *
      * @param Container $container DI constainer
      */

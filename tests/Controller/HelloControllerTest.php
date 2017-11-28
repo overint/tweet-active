@@ -6,7 +6,7 @@ namespace App\Controller;
 use PHPUnit\Framework\TestCase;
 
 /**
- * HelloControllerTest
+ * Hello Controller Test
  */
 class HelloControllerTest extends TestCase
 {

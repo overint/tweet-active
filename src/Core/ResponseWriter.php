@@ -6,7 +6,7 @@ namespace App\Core;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * ResponseWriter
+ * Response Writer
  * Functionality taken from https://github.com/http-interop/response-sender
  */
 class ResponseWriter

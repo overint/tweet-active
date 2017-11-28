@@ -6,6 +6,9 @@ namespace App\Core;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * Router
+ */
 class Router
 {
 
@@ -28,6 +31,12 @@ class Router
     private $params = [];
 
 
+    /**
+     * Router constructor
+     *
+     * @param RequestInterface $request PSR7 Request
+     * @param array            $routes  Array of routes to test
+     */
     public function __construct(RequestInterface $request, array $routes)
     {
         $this->request = $request;
@@ -37,30 +46,53 @@ class Router
     }
 
 
+    /**
+     * Check if a route was matched successfully
+     *
+     * @return bool
+     */
     public function routeMatched(): bool
     {
         return $this->matched;
     }
 
 
-    public function getTargetController(): string
+    /**
+     * Get the target controller of a route
+     *
+     * @return string|null
+     */
+    public function getTargetController()
     {
         return $this->targetController;
     }
 
 
-    public function getTargetMethod(): string
+    /**
+     * Get the target controller method of a route
+     *
+     * @return string|null
+     */
+    public function getTargetMethod()
     {
         return $this->targetMethod;
     }
 
 
+    /**
+     * Get params for the matched route
+     *
+     * @return array
+     */
     public function getParams(): array
     {
         return $this->params;
     }
 
 
+    /**
+     * Attempt to match a route to the provided path
+     */
     private function matchRoute()
     {
         $path = $this->request->getUri()->getPath();
@@ -73,7 +105,7 @@ class Router
         // Loop through routes and try regex match them
         foreach ($this->routes as $route => $action) {
             // Regex should only match routes with params
-            if(strpos($route, ':') === false) {
+            if (strpos($route, ':') === false) {
                 continue;
             }
 
@@ -92,6 +124,11 @@ class Router
     }
 
 
+    /**
+     * Set the target after a route match is found
+     *
+     * @param string $routeTarget In the format Controller@Method
+     */
     private function setRoute(string $routeTarget)
     {
         $routeData = explode('@', $routeTarget);

@@ -9,8 +9,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class UserTweetsTest
- * @package App\TwitterApi
+ * User Tweet Fetcher Test
  */
 class TweetFetcherTest extends TestCase
 {

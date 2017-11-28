@@ -5,7 +5,7 @@ namespace App\Entity;
 use PHPUnit\Framework\TestCase;
 
 /**
- * TweetTest
+ * Tweet Entity Test
  */
 class TweetTest extends TestCase
 {

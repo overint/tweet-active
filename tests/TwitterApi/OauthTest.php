@@ -8,7 +8,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 /**
- * OauthTest
+ * Oauth Test
  */
 class OauthTest extends TestCase
 {
@@ -29,9 +29,8 @@ class OauthTest extends TestCase
         $mockOauth->method('getBearerToken')->willReturn('token');
 
         $oauth = new Oauth($client, 'key', 'secret', null);
-        $this->assertSame('token', $oauth->getBearerToken());
 
-        $oauth = new Oauth($client, 'key', 'secret', null);
+        $this->assertSame('token', $oauth->getBearerToken());
         $this->assertSame('differentToken', $oauth->getBearerToken());
     }
 
@@ -56,7 +55,6 @@ class OauthTest extends TestCase
         $oauth = new Oauth($client, 'key', 'secret', $tempFile);
 
         $this->assertSame('token', $oauth->getBearerToken());
-
         $this->assertSame('token', $oauth->getBearerToken());
 
         if (file_exists($tempFile)) {

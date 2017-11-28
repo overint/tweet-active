@@ -6,7 +6,7 @@ namespace App\Controller;
 use GuzzleHttp\Psr7\Response;
 
 /**
- * AbstractController Class
+ * Abstract Controller
  */
 abstract class AbstractController
 {

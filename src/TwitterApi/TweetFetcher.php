@@ -7,8 +7,7 @@ use App\TwitterApi\Exception\RequestException;
 use GuzzleHttp\Client;
 
 /**
- * Class UserTweets
- * @package App\TwitterApi
+ * Twitter Tweet Fetcher for a user
  */
 class TweetFetcher
 {
@@ -24,7 +23,7 @@ class TweetFetcher
 
 
     /**
-     * Constructor.
+     * Constructor
      *
      * @param Client $client Guzzle Client
      * @param Oauth  $oauth  Oauth

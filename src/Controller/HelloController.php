@@ -6,7 +6,7 @@ namespace App\Controller;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * HelloController
+ * Hello Controller
  */
 class HelloController extends AbstractController
 {

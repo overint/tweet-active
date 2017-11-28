@@ -7,6 +7,10 @@ use App\Repository;
 use App\TwitterApi\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Tweet History Controller
+ * @package App\Controller
+ */
 class TweetHistoryController extends AbstractController
 {
 
@@ -15,9 +19,9 @@ class TweetHistoryController extends AbstractController
 
 
     /**
-     * Constructor.
+     * Constructor
      *
-     * @param Repository\Tweet $tweetRepository
+     * @param Repository\Tweet $tweetRepository Tweet Repository
      */
     public function __construct(Repository\Tweet $tweetRepository)
     {
@@ -25,6 +29,13 @@ class TweetHistoryController extends AbstractController
     }
 
 
+    /**
+     * Return  hour -> tweet count histogram
+     *
+     * @param string $username Twitter screen name
+     *
+     * @return ResponseInterface
+     */
     public function histogram(string $username): ResponseInterface
     {
         try {

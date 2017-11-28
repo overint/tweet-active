@@ -4,6 +4,9 @@ namespace App\TwitterApi;
 
 use GuzzleHttp\Client;
 
+/**
+ * Gets Twitter Oauth Tokens
+ */
 class Oauth
 {
 

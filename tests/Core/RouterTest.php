@@ -8,8 +8,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
- * Class RouterTest
- * @package App\Core
+ * RouterTest
  */
 class RouterTest extends TestCase
 {

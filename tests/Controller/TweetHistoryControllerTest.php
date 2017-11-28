@@ -8,7 +8,7 @@ use App\TwitterApi\Exception\RequestException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * TweetHistoryControllerTest
+ * Tweet History Controller Test
  */
 class TweetHistoryControllerTest extends TestCase
 {

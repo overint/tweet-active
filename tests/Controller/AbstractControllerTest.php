@@ -6,8 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * AbstractControllerTest
- * @package App\Controller
+ * Abstract Controller Test
  */
 class AbstractControllerTest extends TestCase
 {
