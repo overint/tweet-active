@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Core;
 
 use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\RequestInterface;
 
 class Router
 {
@@ -27,7 +28,7 @@ class Router
     private $params = [];
 
 
-    public function __construct(Request $request, array $routes)
+    public function __construct(RequestInterface $request, array $routes)
     {
         $this->request = $request;
         $this->routes = $routes;
@@ -76,7 +77,7 @@ class Router
                 continue;
             }
 
-            $routeRegex = '#' . preg_replace('#\\\:\w+#', '([A-Za-z0-9]+)', preg_quote($route)) . '#';
+            $routeRegex = '#' . preg_replace('#\\\:\w+#', '([A-Za-z0-9-_\.]+)', preg_quote($route)) . '#';
 
             if (preg_match($routeRegex, $path, $match)) {
                 array_shift($match);
