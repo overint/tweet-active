@@ -3,9 +3,7 @@ An application determine what hour of the day a twitter user is most active.
 
 ### Architecture 
 Custom microframework built from scratch (only dependencies are guzzle, for HTTP requests
- to the twitter API, and PHP-DI for the dependancy injection).    
-There is full unit test coverage on the controllers & Twitter API classes, however the framework
- is currently not tested.
+ to the twitter API, and PHP-DI for the dependancy injection).
 
 ## Running tweet-active
  - Run `composer install` to install the dependencies
