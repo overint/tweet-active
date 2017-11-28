@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\TwitterApi\Exception\RequestException;
 use App\TwitterApi\UserTweets;
 use PHPUnit\Framework\TestCase;
 
@@ -36,5 +37,22 @@ class TweetHistoryControllerTest extends TestCase
         $response = $controller->histogram('test');
 
         $this->assertJsonStringEqualsJsonString($expectedJson, $response->getBody()->getContents());
+    }
+
+    /**
+     * Test the histogram method to ensure json error messages are returned
+     */
+    public function testHistogramException()
+    {
+        $exception = new RequestException('test error message');
+
+        $mockUserTweets = $this->createMock(UserTweets::class);
+        $mockUserTweets->method('get')->willThrowException($exception);
+
+        $controller = new TweetHistoryController($mockUserTweets);
+
+        $response = $controller->histogram('test');
+
+        $this->assertJsonStringEqualsJsonString('{"error":"test error message"}', $response->getBody()->getContents());
     }
 }

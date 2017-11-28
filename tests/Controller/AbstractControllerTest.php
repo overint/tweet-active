@@ -17,7 +17,7 @@ class AbstractControllerTest extends TestCase
      */
     public function testHtmlResponse()
     {
-        $controller = new class() extends TestController {};
+        $controller = new class() extends AbstractController {};
         $response = $controller->htmlResponse('test', 123);
 
         $this->assertInstanceOf(ResponseInterface::class, $response);
@@ -32,7 +32,7 @@ class AbstractControllerTest extends TestCase
      */
     public function testTextResponse()
     {
-        $controller = new class() extends TestController {};
+        $controller = new class() extends AbstractController {};
         $response = $controller->textResponse('test text', 456);
 
         $this->assertInstanceOf(ResponseInterface::class, $response);
@@ -53,7 +53,7 @@ class AbstractControllerTest extends TestCase
      */
     public function testJsonResponse($data, int $statusCode, string $expectedJson)
     {
-        $controller = new class() extends TestController {};
+        $controller = new class() extends AbstractController {};
         $response = $controller->jsonResponse($data, $statusCode);
 
         $this->assertInstanceOf(ResponseInterface::class, $response);

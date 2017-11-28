@@ -16,6 +16,9 @@ class UserTweets
     /** Api Enpoint URL */
     const USER_TWEET_ENDPOINT = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
 
+    /** @var Client Guzzle Client */
+    private $client;
+
     /** @var Oauth Twitter auth */
     private $oauth;
 
@@ -23,10 +26,12 @@ class UserTweets
     /**
      * Constructor.
      *
-     * @param string $bearerToken Auth token
+     * @param Client $client Guzzle Client
+     * @param Oauth  $oauth  Oauth
      */
-    public function __construct(Oauth $oauth)
+    public function __construct(Client $client, Oauth $oauth)
     {
+        $this->client = $client;
         $this->oauth = $oauth;
     }
 
@@ -42,12 +47,10 @@ class UserTweets
      */
     public function get(string $username)
     {
-        $client = new Client();
-
-        $response = $client->get(self::USER_TWEET_ENDPOINT, [
+        $response = $this->client->get(self::USER_TWEET_ENDPOINT, [
             'query' => [
                 'screen_name' => $username,
-                'count' => 200,
+                'count' => 1,
                 'trim_user' => 'ture',
                 'exclude_replies' => 'ture',
             ],
@@ -65,6 +68,9 @@ class UserTweets
                 break;
             case 404:
                 throw new RequestException('User not found');
+                break;
+            case 429:
+                throw new RequestException('You have been rate limited. Please wait 15 minutes and try again');
                 break;
             default:
                 throw new RequestException("Unknown error occured, received status code {$response->getStatusCode()}");

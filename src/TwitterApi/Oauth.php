@@ -10,40 +10,51 @@ class Oauth
     /** Oauth Endpoint */
     const OAUTH_ENDPOINT = "https://api.twitter.com/oauth2/token";
 
+    /** @var Client Guzzle Client */
+    private $client;
+
     /** @var string */
     private $consumerKey;
 
     /** @var string */
     private $consumerSecret;
 
+    /** @var string */
+    private $cachePath;
+
 
     /**
      * Constructor.
      *
+     * @param Client $client         Guzzle Client
      * @param string $consumerKey    Consumer Key
      * @param string $consumerSecret Consumer Secret Key
+     * @param null   $cachePath      Path to save key to
      */
-    public function __construct($consumerKey, $consumerSecret)
+    public function __construct(Client $client, $consumerKey, $consumerSecret, $cachePath = null)
     {
+        $this->client = $client;
         $this->consumerKey = $consumerKey;
         $this->consumerSecret = $consumerSecret;
+        $this->cachePath = $cachePath;
     }
 
 
     /**
-     *  Get bearer token
+     *  Get bearer token, optinal caching
      */
     public function getBearerToken()
     {
-        $tokenPath = APP_ROOT . DS . '..' . DS . 'storage' . DS . 'oauth_token';
 
-        if (file_exists($tokenPath)) {
-            return file_get_contents($tokenPath);
+        if ($this->cachePath && file_exists($this->cachePath)) {
+            return file_get_contents($this->cachePath);
         }
 
         $token = $this->fetchBearerToken();
 
-        file_put_contents($tokenPath, $token);
+        if ($this->cachePath) {
+            file_put_contents($this->cachePath, $token);
+        }
 
         return $token;
     }
@@ -54,9 +65,7 @@ class Oauth
      */
     private function fetchBearerToken()
     {
-        $client = new Client();
-
-        $response = $client->post(self::OAUTH_ENDPOINT, [
+        $response = $this->client->post(self::OAUTH_ENDPOINT, [
             'auth' => [$this->consumerKey, $this->consumerSecret],
             'headers' => [
                 'User-Agent' => 'Tweetactive v1',
