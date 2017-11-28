@@ -171,6 +171,15 @@ class RouterTest extends TestCase
                 'App\Controller\Test1',
                 ['my_name'],
             ],
+            'allow dot' => [
+                '/say/my.name',
+                [
+                    '/say/:msg' => 'Test1@test',
+                ],
+                true,
+                'App\Controller\Test1',
+                ['my.name'],
+            ],
         ];
     }
 
