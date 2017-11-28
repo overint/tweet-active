@@ -50,7 +50,7 @@ class UserTweets
         $response = $this->client->get(self::USER_TWEET_ENDPOINT, [
             'query' => [
                 'screen_name' => $username,
-                'count' => 1,
+                'count' => 200,
                 'trim_user' => 'ture',
                 'exclude_replies' => 'ture',
             ],
