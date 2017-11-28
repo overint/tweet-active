@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\Request;
 
 class Router
 {
+
     /** @var Request PSR7 Request */
     private $request;
 
@@ -23,7 +24,7 @@ class Router
     private $targetMethod;
 
     /** @var array Array of URL params */
-    private $params;
+    private $params = [];
 
 
     public function __construct(Request $request, array $routes)
@@ -68,14 +69,29 @@ class Router
             $this->setRoute($this->routes[$path]);
         }
 
-        // TODO regex route matching
+        // Loop through routes and try regex match them
+        foreach ($this->routes as $route => $action) {
+            $routeRegex = '#' . preg_replace('#\\\:\w+#', '([A-Za-z0-9]+)', preg_quote($route)) . '#';
+
+            if (preg_match($routeRegex, $path, $match)) {
+                array_shift($match);
+                foreach ($match as $key => $paramValue) {
+                    $this->params[] = $paramValue;
+                }
+
+                $this->setRoute($action);
+                return;
+            }
+        }
     }
 
-    private function setRoute(string $routeTarget) {
+
+    private function setRoute(string $routeTarget)
+    {
         $routeData = explode('@', $routeTarget);
 
         $this->matched = true;
-        $this->targetController =  'App\Controller\\' . $routeData[0];
+        $this->targetController = 'App\Controller\\' . $routeData[0];
         $this->targetMethod = $routeData[1];
     }
 }

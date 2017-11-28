@@ -5,7 +5,8 @@
  *
  * @param mixed $var Var to dump
  */
-function dd($var){
+function dd($var)
+{
     echo '<pre>';
     var_dump($var);
     echo '</pre>';

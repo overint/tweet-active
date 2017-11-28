@@ -7,15 +7,23 @@ use Config\Routes;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
+/**
+ * Mini MVC Framework
+ * @package App\Core
+ */
 class Framework
 {
 
+    /** Not found response message */
     const NOT_FOUND_RESPONSE = '404 Not Found';
 
     /** @var Request PSR7 Request */
     private $request;
 
 
+    /**
+     * Framework constructor.
+     */
     function __construct()
     {
         $this->init();
@@ -23,6 +31,9 @@ class Framework
     }
 
 
+    /**
+     * Init the framework
+     */
     private function init()
     {
         define("DS", DIRECTORY_SEPARATOR);
@@ -32,26 +43,43 @@ class Framework
     }
 
 
+    /**
+     * Route the request based on the path
+     *
+     * @throws InvalidRouteException
+     */
     private function route()
     {
         $router = new Router($this->request, Routes::get());
 
         if ( ! $router->routeMatched()) {
-            return ResponseWriter::send(new Response(404, [], self::NOT_FOUND_RESPONSE));
+            ResponseWriter::send(new Response(404, [], self::NOT_FOUND_RESPONSE));
         }
 
         $controllerClass = $router->getTargetController();
         $method = $router->getTargetMethod();
+        $params = $router->getParams();
 
         if ( ! class_exists($controllerClass) || ! method_exists($controllerClass, $method)) {
             throw new InvalidRouteException('Misconfigured route - ensure that controller class & method exist');
         }
 
-        //TODO handle params
+        $this->dispatch($controllerClass, $method, $params);
+    }
 
+
+    /**
+     * Dispatch a request to a controller
+     *
+     * @param string $controllerClass Classname of the controller
+     * @param string $method          Target Method name
+     * @param array  $params          Route Params
+     */
+    private function dispatch(string $controllerClass, string $method, array $params = [])
+    {
         $controller = new $controllerClass($this->request);
-        $response = $controller->$method();
+        $response = $controller->$method(...$params);
 
-        return ResponseWriter::send($response);
+        ResponseWriter::send($response);
     }
 }
