@@ -42,12 +42,12 @@ class AbstractController
     /**
      * Make a json PSR7 response object
      *
-     * @param array $data   Data to be Json encoded
+     * @param mixed $data   Data to be Json encoded
      * @param int   $status Response status code
      *
      * @return Response
      */
-    protected function jsonResponse(array $data, int $status = 200)
+    protected function jsonResponse($data, int $status = 200)
     {
         return new Response($status, ['Content-Type' => 'application/json'], json_encode($data));
     }

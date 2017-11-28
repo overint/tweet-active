@@ -2,10 +2,12 @@
 
 namespace App\Core;
 
+use App\Core\Exception\InvalidResponseException;
 use App\Core\Exception\InvalidRouteException;
 use Config\Routes;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Mini MVC Framework
@@ -74,11 +76,17 @@ class Framework
      * @param string $controllerClass Classname of the controller
      * @param string $method          Target Method name
      * @param array  $params          Route Params
+     *
+     * @throws InvalidResponseException
      */
     private function dispatch(string $controllerClass, string $method, array $params = [])
     {
         $controller = new $controllerClass($this->request);
         $response = $controller->$method(...$params);
+
+        if ( ! $response instanceof ResponseInterface) {
+            throw new InvalidResponseException('Controller must return a valid ResponseInterface object');
+        }
 
         ResponseWriter::send($response);
     }

@@ -18,7 +18,7 @@ abstract class Routes
         return [
             '/' => 'HelloController@index',
             '/hello/:name' => 'HelloController@greet',
-            '/histogram/:username' => 'TweetHisotryController@histogram',
+            '/histogram/:username' => 'TweetHistoryController@histogram',
         ];
     }
 }

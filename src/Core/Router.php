@@ -71,6 +71,11 @@ class Router
 
         // Loop through routes and try regex match them
         foreach ($this->routes as $route => $action) {
+            // Regex should only match routes with params
+            if(strpos($route, ':') === false) {
+                continue;
+            }
+
             $routeRegex = '#' . preg_replace('#\\\:\w+#', '([A-Za-z0-9]+)', preg_quote($route)) . '#';
 
             if (preg_match($routeRegex, $path, $match)) {
