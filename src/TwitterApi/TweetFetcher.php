@@ -38,42 +38,57 @@ class TweetFetcher
     /**
      * Get tweets for a username
      *
-     * @param string $username
+     * @param string $username Screen name
+     * @param int    $max      Max tweets to retrive
      *
      * @return \StdClass
-     *
      * @throws RequestException
      */
-    public function get(string $username)
+    public function get(string $username, int $max)
     {
-        $response = $this->client->get(self::USER_TWEET_ENDPOINT, [
+        $tweets = [];
+
+        $requestOptions = [
             'query' => [
                 'screen_name' => $username,
                 'count' => 200,
-                'trim_user' => 'ture',
-                'exclude_replies' => 'ture',
+                'trim_user' => 'true',
+                'exclude_replies' => 'true',
             ],
             'headers' => [
                 'Authorization' => "Bearer {$this->oauth->getBearerToken()}"
             ],
             'http_errors' => false,
-        ]);
+        ];
 
-        switch ($response->getStatusCode()) {
-            case 200:
-                return json_decode($response->getBody()->getContents());
-            case 401:
-                throw new RequestException('User must have a public profile');
+        do {
+            $response = $this->client->get(self::USER_TWEET_ENDPOINT, $requestOptions);
+
+            switch ($response->getStatusCode()) {
+                case 200:
+                    break;
+                case 401:
+                    throw new RequestException('User must have a public profile');
+                case 404:
+                    throw new RequestException('User not found');
+                case 429:
+                    throw new RequestException('You have been rate limited. Please wait 15 minutes and try again');
+                default:
+                    throw new RequestException("Unknown error occured, received status code {$response->getStatusCode()}");
+            }
+
+            $results = json_decode($response->getBody()->getContents());
+
+            if (empty($results)) {
                 break;
-            case 404:
-                throw new RequestException('User not found');
-                break;
-            case 429:
-                throw new RequestException('You have been rate limited. Please wait 15 minutes and try again');
-                break;
-            default:
-                throw new RequestException("Unknown error occured, received status code {$response->getStatusCode()}");
-        }
+            }
+
+            $tweets = array_merge($tweets, $results);
+
+            $requestOptions['query']['max_id'] = end($tweets)->id - 1;
+
+        } while (count($tweets) < $max);
+
+        return array_slice($tweets, 0, $max);
     }
-
 }

@@ -31,7 +31,7 @@ class TweetFetcherTest extends TestCase
         $mockOauth->method('getBearerToken')->willReturn('token');
 
         $tweetApi = new TweetFetcher($client, $mockOauth);
-        $data = $tweetApi->get('testUser');
+        $data = $tweetApi->get('testUser', 1);
 
         $this->assertEquals(json_decode($exampleJson), $data);
     }
@@ -61,7 +61,7 @@ class TweetFetcherTest extends TestCase
         $mockOauth->method('getBearerToken')->willReturn('token');
 
         $tweetApi = new TweetFetcher($client, $mockOauth);
-        $tweetApi->get('testUser');
+        $tweetApi->get('testUser', 1);
     }
 
 
@@ -93,6 +93,49 @@ class TweetFetcherTest extends TestCase
                 RequestException::class,
                 'Unknown error occured, received status code 500',
             ],
+        ];
+    }
+
+
+    /**
+     * Test getting multiple pages of tweets
+     *
+     * @param int $max
+     * @param int $expectedCount
+     *
+     * @dataProvider getMaxTweetsProvider
+     */
+    public function testGetMaxTweets(int $max, int $expectedCount)
+    {
+        $mock = new MockHandler([
+            new Response(200, [], '[{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":1},{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":2},{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":3},{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":4}]'),
+            new Response(200, [], '[{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":1},{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":2},{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":3},{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":4}]'),
+            new Response(200, [], '[{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":1},{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":2},{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":3},{"created_at":"Tue Nov 28 09:02:01 +0000 2017","id":4}]'),
+            new Response(200, [], '[]'),
+        ]);
+
+        $client = new Client(['handler' => $mock]);
+
+        $mockOauth = $this->createMock(Oauth::class);
+        $mockOauth->method('getBearerToken')->willReturn('token');
+
+        $tweetApi = new TweetFetcher($client, $mockOauth);
+        $data = $tweetApi->get('testUser', $max);
+
+        $this->assertCount($expectedCount, $data);
+    }
+
+    public function getMaxTweetsProvider()
+    {
+        return [
+            [1, 1],
+            [2, 2],
+            [4, 4],
+            [5, 5],
+            [8, 8],
+            [9, 9],
+            [12, 12],
+            [13, 12],
         ];
     }
 

@@ -39,7 +39,7 @@ class TweetHistoryController extends AbstractController
     public function histogram(string $username): ResponseInterface
     {
         try {
-            $tweets = $this->tweetRepository->getAllForUser($username);
+            $tweets = $this->tweetRepository->getForUser($username);
         } catch (RequestException $e) {
             return $this->jsonResponse([
                 'error' => $e->getMessage(),
@@ -53,10 +53,10 @@ class TweetHistoryController extends AbstractController
         }
 
         foreach ($tweets as $tweet) {
-            $tweetHour = (int) $tweet->getCreatedAt()->format('H');
+            $tweetHour = (int)$tweet->getCreatedAt()->format('H');
             $times[$tweetHour]++;
         }
 
-        return $this->jsonResponse((object) $times);
+        return $this->jsonResponse((object)$times);
     }
 }

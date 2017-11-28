@@ -33,7 +33,7 @@ class TweetTest extends TestCase
 
         $repo = new Tweet($mockTweetFetcher);
 
-        $tweets = $repo->getAllForUser('test');
+        $tweets = $repo->getForUser('test');
 
         $this->assertEquals($expected, $tweets);
     }

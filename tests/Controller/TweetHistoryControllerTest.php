@@ -27,7 +27,7 @@ class TweetHistoryControllerTest extends TestCase
         $expectedJson = '{"0":0,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":1,"8":2,"9":0,"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0,"24":0}';
 
         $mockTweetRepo = $this->createMock(Repository\Tweet::class);
-        $mockTweetRepo->method('getAllForUser')->willReturn($tweets);
+        $mockTweetRepo->method('getForUser')->willReturn($tweets);
 
         $controller = new TweetHistoryController($mockTweetRepo);
 
@@ -44,7 +44,7 @@ class TweetHistoryControllerTest extends TestCase
         $exception = new RequestException('test error message');
 
         $mockTweetRepo = $this->createMock(Repository\Tweet::class);
-        $mockTweetRepo->method('getAllForUser')->willThrowException($exception);
+        $mockTweetRepo->method('getForUser')->willThrowException($exception);
 
         $controller = new TweetHistoryController($mockTweetRepo);
 
