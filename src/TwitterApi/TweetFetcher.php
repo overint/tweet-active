@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
  * Class UserTweets
  * @package App\TwitterApi
  */
-class UserTweets
+class TweetFetcher
 {
 
     /** Api Enpoint URL */

@@ -3,32 +3,32 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository;
 use App\TwitterApi\Exception\RequestException;
-use App\TwitterApi\UserTweets;
 use Psr\Http\Message\ResponseInterface;
 
 class TweetHistoryController extends AbstractController
 {
 
-    /** @var UserTweets Tweet API client */
-    private $tweetApi;
+    /** @var Repository\Tweet Tweet Repository */
+    private $tweetRepository;
 
 
     /**
      * Constructor.
      *
-     * @param UserTweets $tweetApi
+     * @param Repository\Tweet $tweetRepository
      */
-    public function __construct(UserTweets $tweetApi)
+    public function __construct(Repository\Tweet $tweetRepository)
     {
-        $this->tweetApi = $tweetApi;
+        $this->tweetRepository = $tweetRepository;
     }
 
 
     public function histogram(string $username): ResponseInterface
     {
         try {
-            $tweets = $this->tweetApi->get($username);
+            $tweets = $this->tweetRepository->getAllForUser($username);
         } catch (RequestException $e) {
             return $this->jsonResponse([
                 'error' => $e->getMessage(),
@@ -42,9 +42,7 @@ class TweetHistoryController extends AbstractController
         }
 
         foreach ($tweets as $tweet) {
-            $tweetTime = new \DateTimeImmutable($tweet->created_at);
-            $tweetHour = (int) $tweetTime->format('H');
-
+            $tweetHour = (int) $tweet->getCreatedAt()->format('H');
             $times[$tweetHour]++;
         }
 

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  * Class UserTweetsTest
  * @package App\TwitterApi
  */
-class UserTweetsTest extends TestCase
+class TweetFetcherTest extends TestCase
 {
 
     /**
@@ -31,7 +31,7 @@ class UserTweetsTest extends TestCase
         $mockOauth = $this->createMock(Oauth::class);
         $mockOauth->method('getBearerToken')->willReturn('token');
 
-        $tweetApi = new UserTweets($client, $mockOauth);
+        $tweetApi = new TweetFetcher($client, $mockOauth);
         $data = $tweetApi->get('testUser');
 
         $this->assertEquals(json_decode($exampleJson), $data);
@@ -61,7 +61,7 @@ class UserTweetsTest extends TestCase
         $mockOauth = $this->createMock(Oauth::class);
         $mockOauth->method('getBearerToken')->willReturn('token');
 
-        $tweetApi = new UserTweets($client, $mockOauth);
+        $tweetApi = new TweetFetcher($client, $mockOauth);
         $tweetApi->get('testUser');
     }
 
