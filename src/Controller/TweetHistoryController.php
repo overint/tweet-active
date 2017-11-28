@@ -5,22 +5,30 @@ namespace App\Controller;
 
 use App\TwitterApi\Exception\RequestException;
 use App\TwitterApi\UserTweets;
-use Config;
-use App\TwitterApi\Oauth;
+use Psr\Http\Message\ResponseInterface;
 
 class TweetHistoryController extends AbstractController
 {
 
-    public function histogram(string $username)
+    /** @var UserTweets Tweet API client */
+    private $tweetApi;
+
+
+    /**
+     * Constructor.
+     *
+     * @param UserTweets $tweetApi
+     */
+    public function __construct(UserTweets $tweetApi)
     {
-        $auth = new Oauth(Config\Twitter::get()['consumer_key'], Config\Twitter::get()['consumer_secret']);
+        $this->tweetApi = $tweetApi;
+    }
 
-        $token = $auth->getBearerToken();
 
-        $tweetApi = new UserTweets($token);
-
+    public function histogram(string $username): ResponseInterface
+    {
         try {
-            $tweets = $tweetApi->get($username);
+            $tweets = $this->tweetApi->get($username);
         } catch (RequestException $e) {
             return $this->jsonResponse([
                 'error' => $e->getMessage(),
@@ -41,6 +49,5 @@ class TweetHistoryController extends AbstractController
         }
 
         return $this->jsonResponse((object) $times);
-
     }
 }

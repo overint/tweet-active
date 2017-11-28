@@ -8,7 +8,7 @@ use GuzzleHttp\Psr7\Response;
 /**
  * AbstractController Class
  */
-class AbstractController
+abstract class AbstractController
 {
 
     /**
@@ -19,7 +19,7 @@ class AbstractController
      *
      * @return Response
      */
-    protected function htmlResponse(string $body, int $status = 200)
+    public function htmlResponse(string $body, int $status = 200)
     {
         return new Response($status, ['Content-Type' => 'text/html'], $body);
     }
@@ -33,7 +33,7 @@ class AbstractController
      *
      * @return Response
      */
-    protected function textResponse(string $body, int $status = 200)
+    public function textResponse(string $body, int $status = 200)
     {
         return new Response($status, ['Content-Type' => 'text/plain'], $body);
     }
@@ -47,7 +47,7 @@ class AbstractController
      *
      * @return Response
      */
-    protected function jsonResponse($data, int $status = 200)
+    public function jsonResponse($data, int $status = 200)
     {
         return new Response($status, ['Content-Type' => 'application/json'], json_encode($data));
     }

@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Core;
 
 use App\Core\Exception\InvalidResponseException;
 use App\Core\Exception\InvalidRouteException;
 use Config\Routes;
+use DI\Container;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -19,15 +21,22 @@ class Framework
     /** Not found response message */
     const NOT_FOUND_RESPONSE = '404 Not Found';
 
+    /** @var Container DI Container */
+    private $container;
+
     /** @var Request PSR7 Request */
     private $request;
 
 
     /**
-     * Framework constructor.
+     * Constructor.
+     *
+     * @param Container $container DI constainer
      */
-    function __construct()
+    function __construct(Container $container)
     {
+        $this->container = $container;
+
         $this->init();
         $this->route();
     }
@@ -81,7 +90,7 @@ class Framework
      */
     private function dispatch(string $controllerClass, string $method, array $params = [])
     {
-        $controller = new $controllerClass($this->request);
+        $controller = $this->container->make($controllerClass, ['request' => $this->request]);
         $response = $controller->$method(...$params);
 
         if ( ! $response instanceof ResponseInterface) {

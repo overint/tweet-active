@@ -16,8 +16,8 @@ class UserTweets
     /** Api Enpoint URL */
     const USER_TWEET_ENDPOINT = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
 
-    /** @var string Auth token */
-    private $bearerToken;
+    /** @var Oauth Twitter auth */
+    private $oauth;
 
 
     /**
@@ -25,9 +25,9 @@ class UserTweets
      *
      * @param string $bearerToken Auth token
      */
-    public function __construct(string $bearerToken)
+    public function __construct(Oauth $oauth)
     {
-        $this->bearerToken = $bearerToken;
+        $this->oauth = $oauth;
     }
 
 
@@ -52,7 +52,7 @@ class UserTweets
                 'exclude_replies' => 'ture',
             ],
             'headers' => [
-                'Authorization' => "Bearer {$this->bearerToken}"
+                'Authorization' => "Bearer {$this->oauth->getBearerToken()}"
             ],
             'http_errors' => false,
         ]);
