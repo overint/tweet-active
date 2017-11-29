@@ -13,8 +13,8 @@ $containerBuilder->addDefinitions([
         return new Oauth(
             new \GuzzleHttp\Client(),
             Config\Twitter::get()['consumer_key'],
-            Config\Twitter::get()['consumer_secret']
-            //APP_ROOT . DS . '..' . DS . 'storage' . DS . 'oauth_token'
+            Config\Twitter::get()['consumer_secret'],
+            APP_ROOT . DS . '..' . DS . 'storage' . DS . 'oauth_token'
     );
     }
 ]);
