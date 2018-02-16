@@ -1,5 +1,6 @@
 # tweet-active
 An application determine what hour of the day a twitter user is most active.
+This was a techincal task as part of a job interview. 
 
 ### Architecture 
 Custom microframework built from scratch (only dependencies are guzzle, for HTTP requests
